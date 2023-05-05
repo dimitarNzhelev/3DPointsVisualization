@@ -8,6 +8,9 @@ class Point3D
     double x, y, z;
 
 public:
+    Point3D(double x, double y, double z) : x(x), y(y), z(z)
+    {
+    }
     void setX(double x)
     {
         this->x = x;
@@ -33,7 +36,11 @@ public:
         return this->z;
     }
 
-    // friend istream &operator>>
+    friend ostream &operator<<(ostream &out, Point3D &p)
+    {
+        out << "(" << p.x << ", " << p.y << ", " << p.z << ")";
+        return out;
+    }
 };
 
 class File
@@ -60,3 +67,9 @@ public:
         return this->fs;
     }
 };
+
+int main()
+{
+    Point3D point = Point3D(0, 1, 2);
+    cout << point << endl;
+}
