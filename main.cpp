@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <sstream>
 
 using namespace std;
 // writing - fstreamFileName >> "You are writing in a file";
@@ -8,9 +9,9 @@ class Point3D
     double x, y, z;
 
 public:
-    Point3D(double x, double y, double z) : x(x), y(y), z(z)
-    {
-    }
+    // Point3D(double x, double y, double z) : x(x), y(y), z(z)
+    // {
+    // }
     void setX(double x)
     {
         this->x = x;
@@ -41,6 +42,25 @@ public:
         out << "(" << p.x << ", " << p.y << ", " << p.z << ")";
         return out;
     }
+
+    friend istream &operator>>(istream &in, Point3D &p)
+    {
+        // input type: (x, y, z)
+        string line;
+        getline(in, line);
+        stringstream ss(line);
+        string x, y, z;
+        getline(ss, x, ',');
+        getline(ss, y, ',');
+        getline(ss, z, ',');
+        x.erase(0, 1);
+        z = z.substr(0, z.size() - 1);
+        stringstream xs(x), ys(y), zs(z);
+        xs >> p.x;
+        ys >> p.y;
+        zs >> p.z;
+        return in;
+    };
 };
 
 class File
@@ -50,7 +70,15 @@ class File
 public:
     File(const string &filePath, int flags)
     {
-        this->fs.open(filePath, ios_base::in);
+        // Check if the file exists
+        this->fs.open(filePath, ios::in);
+        if (!this->fs)
+        {
+            throw std::runtime_error("File " + filePath + " does not exist! :(");
+        }
+        this->fs.close();
+
+        this->fs.open(filePath, static_cast<ios_base::openmode>(flags)); // compilatora mi ne struva
         if (!this->fs.is_open())
         {
             throw std::runtime_error("File " + filePath + "could not be opened!");
@@ -68,8 +96,22 @@ public:
     }
 };
 
+class FileManager
+{
+public:
+    static Point3D readPoint3D(File &file)
+    {
+        Point3D point;
+        file.getFileStream().seekg(ios::beg);
+        file.getFileStream() >> point;
+        return point;
+    }
+};
+
 int main()
 {
-    Point3D point = Point3D(0, 1, 2);
+    File file("tmp.txt", ios::in | ios::out | ios::app);
+    Point3D point = FileManager::readPoint3D(file);
     cout << point << endl;
+    return 0;
 }
