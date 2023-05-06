@@ -1,17 +1,15 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <vector>
 
 using namespace std;
-// writing - fstreamFileName >> "You are writing in a file";
+
 class Point3D
 {
     double x, y, z;
 
 public:
-    // Point3D(double x, double y, double z) : x(x), y(y), z(z)
-    // {
-    // }
     void setX(double x)
     {
         this->x = x;
@@ -99,10 +97,10 @@ public:
 class FileManager
 {
 public:
-    static Point3D readPoint3D(File &file)
+    static Point3D readPoint3D(File &file, int position)
     {
         Point3D point;
-        file.getFileStream().seekg(ios::beg);
+        file.getFileStream().seekg(position);
         file.getFileStream() >> point;
         return point;
     }
@@ -111,7 +109,16 @@ public:
 int main()
 {
     File file("tmp.txt", ios::in | ios::out | ios::app);
-    Point3D point = FileManager::readPoint3D(file);
-    cout << point << endl;
+    vector<Point3D> points;
+
+    while (!file.getFileStream().eof())
+    {
+        Point3D point = FileManager::readPoint3D(file, file.getFileStream().tellg());
+        cout << point << endl;
+        points.push_back(point);
+    }
+
+    // it is working :)
+
     return 0;
 }
