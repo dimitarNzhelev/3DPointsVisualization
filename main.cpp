@@ -110,49 +110,53 @@ public:
 
 void CalculateTriangle(vector<Point3D> &points)
 {
-    // Point3D point1, point2, point3, point12, point13;
-    // point12 and point13 are vectors of points
-    // point12 -> vector of point 1 and point 2
-    // point13 -> vector of point 1 and point 3
-    Point3D point1 = points[0];
-    Point3D point2 = points[1];
-    Point3D point3 = points[2];
-    // point12 = (x2-x1, y2-y1, z2-z1)
-    Point3D point12 = Point3D(point2.getX() - point1.getX(), point2.getY() - point1.getY(), point2.getZ() - point1.getZ());
-    // cout << point12 << endl;
 
-    //// point13 = (x3-x1, y3-y1, z3-z1)
-    Point3D point13 = Point3D(point3.getX() - point1.getX(), point3.getY() - point1.getY(), point3.getZ() - point1.getZ());
-    // cout << point13 << endl;
-
-    // point12 * point13 (scalar equation)
-
-    // X:
-    // |point12y point12z|
-    // |point13y point13z|
-    int newPointX = (point12.getY() * point13.getZ()) - (point12.getZ() * point13.getY());
-    cout << "X: " << newPointX << endl;
-
-    // Y:
-    // |point12z point12x|
-    // |point13z point13x|
-    int newPointY = (point12.getZ() * point13.getX()) - (point12.getX() * point13.getZ());
-    cout << "Y: " << newPointY << endl;
-
-    // Y:
-    // |point12x point12y|
-    // |point13x point13y|
-    int newPointZ = (point12.getX() * point13.getY()) - (point12.getY() * point13.getX());
-    cout << "Z: " << newPointZ << endl;
-
-    // check if it is equal to the null vector
-    if (newPointX != 0 || newPointY != 0 || newPointZ != 0)
+    for (int i = 0; i < points.size(); i += 3)
     {
-        cout << "These points can form a triangle :)" << endl;
-    }
-    else
-    {
-        cout << "These points cannot form a triangle :(" << endl;
+        // Point3D point1, point2, point3, point12, point13;
+        // point12 and point13 are vectors of points
+        // point12 -> vector of point 1 and point 2
+        // point13 -> vector of point 1 and point 3
+        Point3D point1 = points[i];
+        Point3D point2 = points[i + 1];
+        Point3D point3 = points[i + 2];
+        // point12 = (x2-x1, y2-y1, z2-z1)
+        Point3D point12 = Point3D(point2.getX() - point1.getX(), point2.getY() - point1.getY(), point2.getZ() - point1.getZ());
+        // cout << point12 << endl;
+
+        //// point13 = (x3-x1, y3-y1, z3-z1)
+        Point3D point13 = Point3D(point3.getX() - point1.getX(), point3.getY() - point1.getY(), point3.getZ() - point1.getZ());
+        // cout << point13 << endl;
+
+        // point12 * point13 (scalar equation)
+
+        // X:
+        // |point12y point12z|
+        // |point13y point13z|
+        int newPointX = (point12.getY() * point13.getZ()) - (point12.getZ() * point13.getY());
+        cout << "X: " << newPointX << endl;
+
+        // Y:
+        // |point12z point12x|
+        // |point13z point13x|
+        int newPointY = (point12.getZ() * point13.getX()) - (point12.getX() * point13.getZ());
+        cout << "Y: " << newPointY << endl;
+
+        // Y:
+        // |point12x point12y|
+        // |point13x point13y|
+        int newPointZ = (point12.getX() * point13.getY()) - (point12.getY() * point13.getX());
+        cout << "Z: " << newPointZ << endl;
+
+        // check if it is equal to the null vector
+        if (newPointX != 0 || newPointY != 0 || newPointZ != 0)
+        {
+            cout << "These points can form a triangle :)" << endl;
+        }
+        else
+        {
+            cout << "These points cannot form a triangle :(" << endl;
+        }
     }
 }
 
@@ -167,7 +171,7 @@ int main()
         // cout << point << endl;
         points.push_back(point);
     }
-
+    cout << points.size() << endl;
     CalculateTriangle(points);
 
     return 0;
