@@ -18,7 +18,7 @@ g++ main.cpp -o my.elf -std=c++11 -Wall -lGL -lGLU -lglut -lGLEW -lglfw -lX11 -l
 
 ## Output
 
-![3D Visualization]("./images/window.png")
+![3D Visualization](./images/window.png)
 
 ## Contributing
 
