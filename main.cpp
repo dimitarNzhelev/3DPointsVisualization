@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <GL/glut.h>
 
 using namespace std;
 
@@ -160,19 +161,66 @@ void CalculateTriangle(vector<Point3D> &points)
     }
 }
 
-int main()
-{
-    File file("tmp.txt", ios::in | ios::out | ios::app);
-    vector<Point3D> points;
+vector<Point3D> points;
 
+void display()
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glTranslatef(0.0f, 0.0f, -10.0f); // move the camera back
+    glRotatef(45, 1.0f, 1.0f, 0.0f);  // rotate the camera
+
+    glBegin(GL_LINES);
+    glColor3f(1.0f, 0.0f, 0.0f); // red color
+
+    // draw lines between the points
+    for (int i = 0; i < points.size(); i++)
+    {
+        for (int j = i + 1; j < points.size(); j++)
+        {
+            glVertex3f(points[i].getX(), points[i].getY(), points[i].getZ());
+            glVertex3f(points[j].getX(), points[j].getY(), points[j].getZ());
+        }
+    }
+    glEnd();
+
+    glutSwapBuffers();
+}
+
+void reshape(int w, int h)
+{
+    glViewport(0, 0, w, h);
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(60.0, (double)w / (double)h, 1.0, 100.0);
+}
+
+int main(int argc, char **argv)
+{
+
+    File file("tmp.txt", ios::in | ios::out | ios::app);
     while (!file.getFileStream().eof())
     {
         Point3D point = FileManager::readPoint3D(file, file.getFileStream().tellg());
         // cout << point << endl;
         points.push_back(point);
     }
-    cout << points.size() << endl;
+
     CalculateTriangle(points);
+
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
+    glutInitWindowSize(640, 480);
+    glutCreateWindow("3DPointsVisualization");
+
+    glutDisplayFunc(display);
+    glutReshapeFunc(reshape);
+
+    glutMainLoop();
 
     return 0;
 }
