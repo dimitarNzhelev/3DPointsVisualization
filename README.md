@@ -16,9 +16,19 @@ g++ main.cpp -o my.elf -std=c++11 -Wall -lGL -lGLU -lglut -lGLEW -lglfw -lX11 -l
 ./my.elf
 ```
 
+## Input Points
+
+```
+(-5,-5,0)
+(4,-3,1)
+(2,5,2)
+```
+
 ## Output
 
 ![3D Visualization](./images/window.png)
+
+![3D Visualization Terminal Output](./images/output.png)
 
 ## Contributing
 
